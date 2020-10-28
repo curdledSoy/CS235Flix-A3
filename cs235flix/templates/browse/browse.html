@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <main>
+        <div class="card-container">
+            {% for data in data %}
+                <div class="card">
+                    <a href="{{ data['url'] }}">
+                    <h3>{{ data['name'] }}</h3>
+                        <h4>Number of Movies:</h4>
+                        <p>{{ data['movies']|length}}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+{% endblock %}

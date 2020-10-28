@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <main id="main">
+        <div id="movie-details">
+            <h1> {{ movie['title'] }}</h1>
+            {% if 'username' in session %}
+                <div style="align-self: center">
+                    <a class="btn-general" href="{{ url_for('movie_bp.watch', title=movie['title'], year=movie['year']) }}">
+                        Watch
+                    </a>
+                    {% if movie['added'] %}
+                            <a class="btn-general" href="{{ url_for('watchlist_bp.remove_from_watchlist', title=movie['title'], year=movie['year']) }}">
+                                Remove from Watchlist
+                            </a>
+                        {% else %}
+                            <a class="btn-general" href="{{ url_for('watchlist_bp.add_to_watchlist', title=movie['title'], year=movie['year']) }}">
+                                Add to Watchlist
+                            </a>
+                        {% endif %}
+                </div>
+            {% endif %}
+            <div id="movie-numerical-data">
+                <div>
+                    <h2>Year</h2>
+                    <p>{{ movie['year']}}</p>
+                </div>
+                <div>
+                    <h2>Rank</h2>
+                    <p>{{ movie['rank'] }}</p>
+                </div>
+                <div>
+                    <h2>Rating</h2>
+                    <p>{{ movie['rating'] }}/10</p>
+                </div>
+                <div>
+                    <h2>Metascore</h2>
+                    <p>{{ movie['meta_score']}}</p>
+                </div>
+                <div>
+                    <h2>Revenue</h2>
+                    <p>${{ movie['revenue'] }}m</p>
+                </div>
+
+            </div>
+            <div id="movie-text-data">
+                <div id="description">
+                    <h2>Description</h2>
+                    <p>{{ movie['description'] }}</p>
+                </div>
+                <div id="genres">
+                    <ul>
+                    <h2>Genres</h2>
+                        {% for genre in movie['genres'] %}
+                            <li><a href="{{ url_for('genre_bp.genre', genre=genre) }}"><p>{{ genre }}</p></a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div id="director">
+                    <h2>Directed by</h2>
+                    <p><a href={{ url_for('person_bp.director', fullname=movie['director']) }}>{{ movie['director'] }}</a></p>
+                </div>
+                <div id="actors">
+                    <h2>Staring</h2>
+                    <ul>
+                        {% for actor in movie['actors'] %}
+                            <li><a href="{{ url_for('person_bp.actor', fullname=actor) }}"><p>{{ actor }}</p></a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column">
+            <h2>Reviews</h2>
+            {% if 'username' in session %}
+                <button class ="btn-general" onclick="location.href='{{ movie.add_review_url }}'">
+                    Add Review
+            </button>
+            {% endif %}
+            {% if movie['reviews']|length == 0 %}
+                <div class="card-container">
+                    <div class="card">
+                    <p>No Reviews 😭</p>
+                    </div>
+                </div>
+            {% else %}
+            <div class="card-container">
+                {% for review in movie['reviews'] %}
+                    <div class="card">
+                        <h3>{{ review['author'] }}</h3>
+                        <p>{{ review['timestamp'] }}</p>
+                        <h3>{{ review['rating'] }}/5</h3>
+                        <p>{{ review['review_text'] }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

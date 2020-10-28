@@ -1,0 +1,15 @@
+{% extends 'search/search.html' %}
+
+{% block results %}
+    {% if movies|length == 0 %}
+        <div class="card-container">
+                <div class="card">
+                <p>No Matching Movies 😭</p>
+                </div>
+            </div>
+    {% else %}
+        {% include 'card.html' %}
+        {% block movie_card %}
+        {% endblock %}
+    {% endif %}
+{% endblock %}

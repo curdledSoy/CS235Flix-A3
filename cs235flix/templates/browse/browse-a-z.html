@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="card-container">
+                {% for letter in a_to_z %}
+                    <div class="card">
+                        <a href="{{ letter['url'] }}">
+                            <h3>{{ letter['letter'] }}</h3>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+{% endblock %}

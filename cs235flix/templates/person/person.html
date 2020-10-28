@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <main id="main">
+        <h1>{{ fullname }}</h1>
+        <h2>Films</h2>
+        {% include 'card.html' %}
+        {% block movie_card %}
+        {% endblock %}
+        {% if collegues %}
+        <h2>Collegues</h2>
+        <div class="card-container">
+                {% for actor in collegues %}
+                    <div class="card">
+                        <a href="{{ actor['url'] }}">
+                        <h3>{{ actor['fullname'] }}</h3>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </main>
+{% endblock %}

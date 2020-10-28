@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<main id="main">
+    <div class="form-wrapper">
+        <form action="{{ handler_url }}" method="post">
+            {{ review_form.csrf_token }}
+            {{ review_form.movie_title }}
+            {{ review_form.movie_year }}
+            <br>
+            <h1>{{ review_form.movie_title.data }}</h1>
+            <h2>{{ review_form.movie_year.data }}</h2>
+            <div class="form-field">
+                <br>
+                <div style="display: flex; flex-direction: row;">
+                    {% for rating in review_form.rating %}
+                            <div style="width: 20%">{{ rating.label }} <br> {{ rating }} </div>
+                    {% endfor %}
+
+                </div>
+                {% if review_form.rating.errors %}
+                    <ul class="errors">
+                        {% for error in review_form.rating.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {{ review_form.review(size = 100, placeholder="Enter Your Review", class="textarea", cols=50, rows = 6, wrap="hard") }}
+                {% if review_form.review.errors %}
+                    <ul class="errors">
+                        {% for error in review_form.review.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {{ review_form.submit }}
+        </form>
+    </div>
+</main>
+
+{% endblock %}

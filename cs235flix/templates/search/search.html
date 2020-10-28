@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+<main id="main">
+    <div class="formwrapper">
+        <form id="searchform" action="{{ handler_url }}" method="post">
+            {{ search_form.csrf_token }}
+            <br>
+            <div class="form-field">
+                {{ search_form.director.label }}
+                {{ search_form.director }}
+                {{ search_form.actors.label }}
+                {{ search_form.actors }}
+                {{ search_form.genres.label }}
+                {{ search_form.genres }}
+                {{ search_form.fuzzy.label }}
+                {{ search_form.fuzzy }}
+            </div>
+            {{ search_form.submit }}
+        </form>
+    </div>
+    {% block results %}
+    {% endblock %}
+</main>
+{% endblock %}

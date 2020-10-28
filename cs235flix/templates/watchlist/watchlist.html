@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block title %}
+    <h1>Watchlist</h1>
+{% endblock %}
+{% block content %}
+    <div class="card-container">
+        {% if watchlist|length == 0 %}
+            <div class="card">
+            <p>Watchlist is empty 😭</p>
+            </div>
+        {% else %}
+            {% for movie in watchlist %}
+                <a href="{{ movie['url'] }}">
+                    <div class="card">
+
+                        <h3>{{ movie['title'] }}</h3>
+                        <p>{{ movie['year'] }}</p>
+                        <div>
+                            <a class="btn-general" href="{{ url_for('watchlist_bp.remove_from_watchlist', title=movie['title'], year=movie['year']) }}">
+                                    Remove
+                            </a>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}

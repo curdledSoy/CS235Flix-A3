@@ -1,0 +1,35 @@
+<nav id="nav">
+    <div id="nav-contents">
+        <img src="{{ url_for('static', filename='img/logo.png' ) }}" style="width: 100%">
+        {% if 'username' in session %}
+            <h2 id="nav-header">
+                {{ session['username'] }}
+            </h2>
+            <a class="btn-nav" href="{{ url_for('watchlist_bp.watchlist') }}">My Watchlist</a>
+        {% endif %}
+
+        <div class="formwrapper">
+            <form action="{{ url_for('search_bp.search') }}" method="post">
+            {{ search_form.csrf_token }}
+            <div class="form-field">
+                {{ search_form.fuzzy }}
+            </div>
+            {{ search_form.submit(class_="btn-nav") }}
+        </form>
+        </div>
+        <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
+        <a class="btn-nav" href="{{ url_for('browse_bp.movies_by_first_letter') }}">Movies</a>
+        <a class="btn-nav" href="{{ url_for('browse_bp.genres')}}">Genres</a>
+        <a class="btn-nav" href="{{ url_for('browse_bp.directors_by_inital') }}">Directors</a>
+        <a class="btn-nav" href="{{ url_for('browse_bp.actors_by_initial') }}">Actors</a>
+    </div>
+    <div id="nav-footer">
+        {% if 'username' in session %}
+            <a class="btn-nav" href="{{ url_for('authentication_bp.logout') }}">Logout</a>
+        {% else %}
+            <a class="btn-nav" href="{{ url_for('authentication_bp.login') }}">Login</a>
+            <a class="btn-nav" href="{{ url_for('authentication_bp.register') }}">Register</a>
+        {% endif %}
+    </div>
+
+</nav>

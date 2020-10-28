@@ -1,0 +1,29 @@
+
+{% block movie_card %}
+    <div class="card-container">
+    {% for movie in movies %}
+        <div class="card">
+            <a href="{{ movie['url'] }}">
+                <p>{{ movie['rank'] }}</p>
+                <h3>{{ movie['title'] }}</h3>
+                <p>{{ movie['year'] }}</p>
+                <div>{% if 'username' in session %}
+                        {% if movie['added'] %}
+                            <a class="btn-general" href="{{ url_for('watchlist_bp.remove_from_watchlist', title=movie['title'], year=movie['year']) }}">
+                                    Remove
+                            </a>
+                        {% else %}
+                            <a class="btn-general" href="{{ url_for('watchlist_bp.add_to_watchlist', title=movie['title'], year=movie['year']) }}">
+                                    Add
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
+{% block person_card %}
+
+{% endblock %}

@@ -1,0 +1,10 @@
+#!/bin/sh
+'''exec' "/Users/tombrittenden/OneDrive - The University of Auckland/2020/Semester 2/COMPSCI 235/CS235Flix/CS235Flix-A3/venv/bin/python" "$0" "$@"
+' '''
+# -*- coding: utf-8 -*-
+import re
+import sys
+from jsonschema.cli import main
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())

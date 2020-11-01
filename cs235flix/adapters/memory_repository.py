@@ -4,11 +4,10 @@ from typing import List, Optional
 from werkzeug.security import generate_password_hash
 from .repository import AbstractRepository, RepositoryException
 from ..domain.model import Director, WatchList, Actor, Movie, Review, User, UserGroup, Genre
-
+from .MovieFileReader import MovieFileReader
 
 class MemoryRepository(AbstractRepository):
-    """
-    """
+
     def __init__(self):
         self.__actors = set()
         self.__directors = set()
@@ -21,50 +20,61 @@ class MemoryRepository(AbstractRepository):
 
     @property
     def dataset_of_movies(self):
-        """
-        """
+
         return self.__movies
+
+    @dataset_of_movies.setter
+    def dataset_of_movies(self, movies):
+        self.__movies = movies
 
     @property
     def dataset_of_actors(self):
-        """
-        """
         return self.__actors
+
+    @dataset_of_actors.setter
+    def dataset_of_actors(self, actors):
+        self.__actors = actors
 
     @property
     def dataset_of_directors(self):
-        """
-        """
+
         return self.__directors
+
+    @dataset_of_directors.setter
+    def dataset_of_directors(self, directors):
+        self.__directors = directors
 
     @property
     def dataset_of_genres(self):
-        """
-        """
+
         return self.__genres
+
+    @dataset_of_genres.setter
+    def dataset_of_genres(self, genres):
+        self.__genres = genres
 
     @property
     def dataset_of_users(self):
-        """
-        """
+
         return self.__users
+
+    @dataset_of_users.setter
+    def dataset_of_users(self, users):
+        self.__users = users
 
     @property
     def dataset_of_groups(self):
-        """
-        """
+
         return self.__userGroups
 
     @property
     def dataset_of_reviews(self):
-        """
-        """
+
         return self.__reviews
 
     @property
     def dataset_of_watchlists(self):
-        """
-        """
+
         return self.__watchlists
 
     def add_user(self, user: User):
@@ -306,109 +316,11 @@ class MemoryRepository(AbstractRepository):
                 user.watchlist.remove_movie(movie)
 
 
-# noinspection PyUnusedLocal
-def read_csv(filename: str):
-    """
-    """
-    with open(filename, mode='r', encoding='utf-8-sig') as csvfile:
-        reader = csv.reader(csvfile)
-
-        headers = next(reader)
-
-        for row in reader:
-            row = [cell.strip() for cell in row]
-            yield row
-
-
-def load_movies(data_path: str, repo: MemoryRepository):
-    """
-    """
-    for data_row in read_csv(os.path.join(data_path, 'Data1000Movies.csv')):
-        movie = Movie(data_row[1], int(data_row[6]))
-        movie.rank = int(data_row[0])
-        movie.genres = load_genres(data_row[2], repo)
-        movie.description = data_row[3]
-        movie.director = load_directors(data_row[4], repo)
-        movie.actors = load_actors(data_row[5], repo)
-        try:
-            movie.runtime_minutes = int(data_row[7])
-        except ValueError:
-            movie.runtime_minutes = 0
-        try:
-            movie.rating = int(data_row[8])
-        except ValueError:
-            pass
-        try:
-            movie.votes = int(data_row[9])
-        except ValueError:
-            pass
-        try:
-            movie.revenue = float(data_row[10])
-        except ValueError:
-            pass
-        try:
-            movie.metascore = int(data_row[11])
-        except ValueError:
-            pass
-
-        if movie not in repo.dataset_of_movies:
-            repo.add_movie(movie)
-
-
-def load_actors(actors: str, repo: MemoryRepository):
-    """
-    """
-    names = actors.split(',')
-    actors = []
-    for name in names:
-        temp_actor = Actor(name)
-        if temp_actor not in actors:
-            actors.append(temp_actor)
-        if temp_actor not in repo.dataset_of_actors:
-            repo.add_actor(temp_actor)
-    return actors
-
-
-def load_genres(genres: str, repo: MemoryRepository):
-    """
-    """
-    genres_as_str = genres.split(',')
-    genres = []
-    for genre in genres_as_str:
-        temp_genre = Genre(genre)
-        if temp_genre not in genres:
-            genres.append(temp_genre)
-        if temp_genre not in repo.dataset_of_genres:
-            repo.add_genre(temp_genre)
-    return genres
-
-
-def load_directors(director: str, repo: MemoryRepository):
-    """
-    """
-    temp_director = Director(director)
-    if temp_director not in repo.dataset_of_directors:
-        repo.add_director(temp_director)
-    return temp_director
-
-
-def load_users(data_path, repo: MemoryRepository):
-    """
-    """
-    users = dict()
-    for data_row in read_csv(os.path.join(data_path, 'Users.csv')):
-        user = User(
-            data_row[0],
-            generate_password_hash(data_row[1])
-        )
-        repo.add_user(user)
-        users[data_row[0]] = user
-    return users
-
 
 def populate(data_path: str, repo: MemoryRepository):
-    """
-    """
-    # Load Movies, Actors, Directors and Genres
-    load_movies(data_path, repo)
-    load_users(data_path, repo)
+    movieFileReader = MovieFileReader(data_path)
+    repo.dataset_of_genres = MovieFileReader.dataset_of_genres
+    repo.dataset_of_directors = MovieFileReader.dataset_of_directors
+    repo.dataset_of_actors = MovieFileReader.dataset_of_actors
+    repo.dataset_of_users = MovieFileReader.dataset_of_users
+    repo.dataset_of_movies = MovieFileReader.dataset_of_movies

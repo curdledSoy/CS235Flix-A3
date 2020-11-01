@@ -371,6 +371,7 @@ class WatchList:
         """
         return self.__watchlist[random.randint(0, len(self.__watchlist))]
 
+    @property
     def size(self):
         """
         """
@@ -416,7 +417,6 @@ class User:
         self.__time_spent_watching_movies_minutes = 0
         self.__watchlist = WatchList()
         self.__is_admin = is_admin
-        self.__friends = []
 
     def __repr__(self):
         return f"<User {self.__user_name}>"
@@ -491,28 +491,6 @@ class User:
         """
         return self.__is_admin
 
-    @property
-    def friends(self):
-        """
-        """
-        return self.__friends
-
-    def add_friend(self, user):
-        """
-        """
-        self.__friends.append(user)
-        user.friends.append(user)
-
-    def remove_friend(self, user):
-        """
-        """
-        self.__friends.remove(user)
-        user.friends.remove(user)
-
-    def is_friends(self, user):
-        """
-        """
-        return user in self.__friends
 
 
 class Review:
